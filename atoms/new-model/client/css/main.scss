@@ -1,0 +1,44 @@
+@import "fonts";
+@import "mq";
+@import "palette";
+@import "charts";
+// @import "enhancer";
+
+.interactive-atom {
+    margin: 0;
+    padding: 0;
+
+    #stateTargets {
+        .keyLabel {
+            font-size:12px;
+            fill: #767676;
+        }
+
+        #toggle, #keyContainer { 
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        #toggle {
+            color: #000;
+            vertical-align: middle;
+        }
+
+        .btn.blue-button-selected {
+            background-color: #2171b5;
+            color: #FFF;
+        }
+
+        .btn.red-button-selected{
+            background-color: #ef3b2c;
+            color: #FFF;
+        }
+
+
+        // #chartKey {
+        //      display: flex;
+        
+        // }
+    }
+
+}
