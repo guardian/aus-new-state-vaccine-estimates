@@ -108,7 +108,7 @@ function init(results) {
 	const gdnDate = d3.timeFormat("%-d %B, %Y");
 
 	console.log(gdnDate(lastUpdated))
-	context.select("#subTitle").html(`Based on the current seven day average of first doses for each state or territory, plus the most recent lag time between first and second doses. Showing estimates ranging from two weeks ago to now. Data last updated ${gdnDate(lastUpdated)}.`)
+	context.select("#subTitle").html(`Based on the current seven day average of first doses for each state or territory, plus the most recent lag time between first and second doses. Showing estimates ranging from two weeks ago to now. Data as at ${gdnDate(lastUpdated)}.`)
 
 	console.log("data", data)
 
