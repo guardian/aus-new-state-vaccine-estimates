@@ -8,7 +8,7 @@ function init(results) {
 
 	var data = results["sheets"]['data']
 
-	console.log(data)
+	// console.log(data)
   
 	var dataKeys = Object.keys(data[0])
 	// var xVar = dataKeys[4]
@@ -89,35 +89,88 @@ function init(results) {
 
 	var regExp = /\(([^)]+)\)/;
 	
+
+	// console.log(today)
+
+
+	// var cutOff = new Date('2021-10-30')	
+	var cutOff = new Date()
+	// cutOff.setDate(today.getDate() + 2)
+	cutOff = today
+	console.log(cutOff);
+
+	//  Create dict with the latest prediction dates for each state
+
+	var grouped = d3.groups(data, d => d.state)
+	var most_recent = {}
+	grouped.forEach(function(d) {
+		// console.log(d)
+		var init_state = d[0]
+		console.log(init_state)
+		var latest = d[1].filter((d) => d.day == 0)[0]
+		console.log(latest)
+		most_recent[init_state] = {"70":parseTime(latest['seventy_finish_second']), '80':parseTime(latest['eighty_finish_second'])}
+
+	})
+
+
+	// console.log(most_recent)
+
+
 	var allDates = []
 	data.forEach(function (d) {
+		var init_state = most_recent[d.state]
+		// console.log(d.state)
+
+		// console.log("70", init_state['70'])
 		if (typeof d.eighty_finish_second == "string") {
 			d.eighty_finish_second = parseTime(d.eighty_finish_second)
 			d.seventy_finish_second = parseTime(d.seventy_finish_second)
 			d.eighty_text = formatTime(d.eighty_finish_second)
 			d.seventy_text = formatTime(d.seventy_finish_second)
 		}
+
+		// If the dates are before the cutoff then we delete them
+		if (init_state['70'] < cutOff){
+			// console.log(d)
+			console.log("First")
+			d.seventy_finish_second = ''
+			d.seventy_text = ''
+			// allDates.push(d.seventy_finish_second)
+
+		} 
+		
+		if (init_state['80'] < cutOff){
+			// allDates.push(d.eighty_finish_second)
+			console.log("second")
+			d.eighty_text = ''
+			d.eighty_finish_second = ''
+		}
+
 		allDates.push(d.eighty_finish_second)
 		allDates.push(d.seventy_finish_second)
 		d.recent = +d.recent
 	})
+
+	// console.log(data)
 
 	data.sort((a, b) => b.day - a.day);
 
 	var lastUpdated = parseTime(data.filter(r => r.day === 0)[0]['cutoff'])
 	const gdnDate = d3.timeFormat("%-d %B, %Y");
 
-	console.log(gdnDate(lastUpdated))
+	// console.log(gdnDate(lastUpdated))
 	context.select("#subTitle").html(`Based on the current seven day average of first doses for each state or territory, plus the most recent lag time between first and second doses. Showing estimates ranging from two weeks ago to now. Data as at ${gdnDate(lastUpdated)}.`)
 
-	console.log("data", data)
+	// console.log("data", data)
 
 	var minDate = d3.min(allDates)
 	var maxDate = d3.max(allDates)
 
-	var niceDate = new Date(minDate - 1000 * 60 * 60 * 24 * 3)
+	// var niceDate = new Date(minDate - 1000 * 60 * 60 * 24 * 3)
+	var niceDate = new Date(today - 1000 * 60 * 60 * 24 * 3)
 
-	console.log(niceDate)
+	// console.log(niceDate)
 
 	var x = d3.scaleTime()
 		.range([0, width])
