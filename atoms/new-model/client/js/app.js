@@ -45,6 +45,9 @@ function init(results) {
 	}
 
 
+
+
+
 	// if (isMobile == true){
 	// 	line_stroke_width = line_stroke_width/3
 	// 	lolli_r = lolli_r/3
@@ -103,6 +106,18 @@ function init(results) {
 	})
 
 	data.sort((a, b) => b.day - a.day);
+
+	const targetsHit70 = [
+		{"state":"NSW", "date":parseTime("2021-10-06"), "text":"6 Oct"}
+	]
+
+	const targetsHit80 = [
+	]
+
+	const statesHit70 = targetsHit70.map(d => d.state)
+	const statesHit80 = targetsHit80.map(d => d.state)
+
+	console.log(statesHit70)
 
 	var lastUpdated = parseTime(data.filter(r => r.day === 0)[0]['cutoff'])
 	const gdnDate = d3.timeFormat("%-d %B, %Y");
@@ -239,8 +254,6 @@ function init(results) {
 		// .attr("transform", "translate(-10,0)rotate(-45)")
 		.style("text-anchor", "middle")
 	
-		
-
 	// Y axis
 	var y = d3.scaleBand()
 	.range([0, height])
@@ -250,6 +263,9 @@ function init(results) {
 	// var thingo = data.map((d) => d[yVar])
 
 	// console.log(thingo)
+
+	var data70 = data.filter(d => !statesHit70.includes(d.state))
+	var data80 = data.filter(d => !statesHit80.includes(d.state))
 
 	features.append("g")
 	.attr("class","axis y")
@@ -268,7 +284,7 @@ function init(results) {
       .attr("fill", "#767676")
 
 	features.selectAll("circles70")
-		.data(data)
+		.data(data70)
 		.enter()
 		.append("circle")
 		.attr("class", "seventy")
@@ -288,8 +304,33 @@ function init(results) {
 			})
 		.attr("stroke-width",1)	
 
+		features.selectAll("reached70")
+			.data(targetsHit70)
+			.enter()
+			.append("circle")
+			.attr("class", "seventy")
+			.attr("cx", function(d) { return x(d.date); })
+			.attr("cy", function(d) { return y(d.state); })
+			.attr("r", d => radius(14))
+			.style("fill", d => blues(14))
+			.attr("opacity", 0.7)
+			.attr("stroke", "#000")
+			.attr("stroke-width",1)	
+
+		features.selectAll("reached70")
+			.data(targetsHit70)
+			.enter()
+			.append("image")
+			.attr("xlink:href", '<%= path %>/tick.svg')
+			.attr("class", "seventy")
+			.attr("width", 14)
+			.attr("height", 14)
+			.attr("x", function(d) { return x(d.date) - 7; })
+			.attr("y", function(d) { return y(d.state) - 7; })
+
+
 	features.selectAll("circles80")
-		.data(data)
+		.data(data80)
 		.enter()
 		.append("circle")
 		.attr("class", "eighty")
@@ -309,9 +350,8 @@ function init(results) {
 			})
 		.attr("stroke-width",1)	
 
-
 	features.selectAll("circleLine")
-		.data(data.filter(r => r.day === 0))
+		.data(data80.filter(r => r.day === 0))
 		.enter()
 		.append("line")
 		.attr("class", "circleLine eighty")
@@ -325,7 +365,7 @@ function init(results) {
 		.attr("stroke-width",1)
 
 	features.selectAll("circleLine")
-		.data(data.filter(r => r.day === 0))
+		.data(data70.filter(r => r.day === 0))
 		.enter()
 		.append("line")
 		.attr("class", "circleLine seventy")
@@ -338,8 +378,23 @@ function init(results) {
 		.attr("stroke", "#000")
 		.attr("stroke-width",1)	
 
+		features.selectAll("circleLine")
+		.data(targetsHit70)
+		.enter()
+		.append("line")
+		.attr("class", "circleLine seventy")
+		.attr("x1", d => x(d.date))
+		.attr("x2", d => x(d.date))
+		.attr("y1", d => { 
+				return y(d.state) - radius(14)
+			})
+		.attr("y2", d =>  { return y(d.state) - days_offset})
+		.attr("stroke", "#000")
+		.attr("stroke-width",1)	
+
+
 	features.selectAll("text80")
-		.data(data.filter(r => r.day === 0))
+		.data(data80.filter(r => r.day === 0))
 		.enter()
 		.append("text")
 		.attr("x", d => x(d.eighty_finish_second))
@@ -350,7 +405,7 @@ function init(results) {
 		.attr("font-size", 12)
 
 	features.selectAll("text70")
-		.data(data.filter(r => r.day === 0))
+		.data(data70.filter(r => r.day === 0))
 		.enter()
 		.append("text")
 		.attr("x", d => x(d.seventy_finish_second))
@@ -360,13 +415,24 @@ function init(results) {
 		.text(d => d.seventy_text)
 		.attr("font-size", 12)	
 
+	features.selectAll("text70")
+		.data(targetsHit70)
+		.enter()
+		.append("text")
+		.attr("x", d => x(d.date))
+		.attr("text-anchor", "middle")
+		.attr("y", d => y(d.state) - days_offset - 2)
+		.attr("class", "keyLabel seventy")
+		.text(d => d.text)
+		.attr("font-size", 12)		
+
 
 	var seventyButton = context.select("#seventyButton")
 	var eightyButton = context.select("#eightyButton")
 
 	if (seventyShowing) {
 			context.selectAll(".seventy")
-				.attr("opacity", 1)	
+				.attr("opacity", d => opacity(d.recent))
 			seventyButton.classed("blue-button-selected", true)
 	}
 
@@ -378,7 +444,7 @@ function init(results) {
 
 	if (eightyShowing) {
 			context.selectAll(".eighty")
-				.attr("opacity", 1)	
+				.attr("opacity", d => opacity(d.recent))
 			eightyButton.classed("red-button-selected", true)
 	}
 
@@ -401,7 +467,7 @@ function init(results) {
 		else {
 			context.selectAll(".seventy")
 				.transition()
-				.attr("opacity", 1)
+				.attr("opacity", d => opacity(d.recent))
 			seventyShowing = true
 			seventyButton.classed("blue-button-selected", true)
 		}
@@ -421,7 +487,7 @@ function init(results) {
 		else {
 			context.selectAll(".eighty")
 				.transition()
-				.attr("opacity", 1)
+				.attr("opacity", d => opacity(d.recent))
 			eightyShowing = true
 			eightyButton.classed("red-button-selected", true)
 		}
