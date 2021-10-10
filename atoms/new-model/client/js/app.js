@@ -97,24 +97,24 @@ function init(results) {
 
 
 	// var cutOff = new Date('2021-10-30')	
-	var cutOff = new Date()
-	// cutOff.setDate(today.getDate() + 2)
-	cutOff = today
-	console.log(cutOff);
+	// var cutOff = new Date()
+	// // cutOff.setDate(today.getDate() + 2)
+	// cutOff = today
+	// console.log(cutOff);
 
-	//  Create dict with the latest prediction dates for each state
+	// //  Create dict with the latest prediction dates for each state
 
-	var grouped = d3.groups(data, d => d.state)
-	var most_recent = {}
-	grouped.forEach(function(d) {
-		// console.log(d)
-		var init_state = d[0]
-		console.log(init_state)
-		var latest = d[1].filter((d) => d.day == 0)[0]
-		console.log(latest)
-		most_recent[init_state] = {"70":parseTime(latest['seventy_finish_second']), '80':parseTime(latest['eighty_finish_second'])}
+	// var grouped = d3.groups(data, d => d.state)
+	// var most_recent = {}
+	// grouped.forEach(function(d) {
+	// 	// console.log(d)
+	// 	var init_state = d[0]
+	// 	console.log(init_state)
+	// 	var latest = d[1].filter((d) => d.day == 0)[0]
+	// 	console.log(latest)
+	// 	most_recent[init_state] = {"70":parseTime(latest['seventy_finish_second']), '80':parseTime(latest['eighty_finish_second'])}
 
-	})
+	// })
 
 
 	// console.log(most_recent)
@@ -122,7 +122,7 @@ function init(results) {
 
 	var allDates = []
 	data.forEach(function (d) {
-		var init_state = most_recent[d.state]
+		// var init_state = most_recent[d.state]
 		// console.log(d.state)
 
 		// console.log("70", init_state['70'])
@@ -133,22 +133,22 @@ function init(results) {
 			d.seventy_text = formatTime(d.seventy_finish_second)
 		}
 
-		// If the dates are before the cutoff then we delete them
-		if (init_state['70'] < cutOff){
-			// console.log(d)
-			console.log("First")
-			d.seventy_finish_second = ''
-			d.seventy_text = ''
-			// allDates.push(d.seventy_finish_second)
+		// // If the dates are before the cutoff then we delete them
+		// if (init_state['70'] < cutOff){
+		// 	// console.log(d)
+		// 	console.log("First")
+		// 	d.seventy_finish_second = ''
+		// 	d.seventy_text = ''
+		// 	// allDates.push(d.seventy_finish_second)
 
-		} 
+		// } 
 		
-		if (init_state['80'] < cutOff){
-			// allDates.push(d.eighty_finish_second)
-			console.log("second")
-			d.eighty_text = ''
-			d.eighty_finish_second = ''
-		}
+		// if (init_state['80'] < cutOff){
+		// 	// allDates.push(d.eighty_finish_second)
+		// 	console.log("second")
+		// 	d.eighty_text = ''
+		// 	d.eighty_finish_second = ''
+		// }
 
 		allDates.push(d.eighty_finish_second)
 		allDates.push(d.seventy_finish_second)
@@ -160,7 +160,8 @@ function init(results) {
 	data.sort((a, b) => b.day - a.day);
 
 	const targetsHit70 = [
-		{"state":"NSW", "date":parseTime("2021-10-06"), "text":"6 Oct"}
+		{"state":"NSW", "date":parseTime("2021-10-06"), "text":"6 Oct"},
+		{"state":"ACT", "date":parseTime("2021-10-07"), "text":"7 Oct"}
 	]
 
 	const targetsHit80 = [
@@ -183,7 +184,7 @@ function init(results) {
 	var maxDate = d3.max(allDates)
 
 	// var niceDate = new Date(minDate - 1000 * 60 * 60 * 24 * 3)
-	var niceDate = new Date(today - 1000 * 60 * 60 * 24 * 3)
+	var niceDate = parseTime("2021-10-03")
 
 	// console.log(niceDate)
 
