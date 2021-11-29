@@ -3,6 +3,7 @@ import * as d3 from "d3"
 
 var seventyShowing = true
 var eightyShowing = true
+var ninetyShowing = true
 
 function init(results) {
 
@@ -129,8 +130,11 @@ function init(results) {
 		if (typeof d.eighty_finish_second == "string") {
 			d.eighty_finish_second = parseTime(d.eighty_finish_second)
 			d.seventy_finish_second = parseTime(d.seventy_finish_second)
+			d.ninety_finish_second = parseTime(d.ninety_finish_second)
+
 			d.eighty_text = formatTime(d.eighty_finish_second)
 			d.seventy_text = formatTime(d.seventy_finish_second)
+			d.ninety_text = formatTime(d.ninety_finish_second)
 		}
 
 		// // If the dates are before the cutoff then we delete them
@@ -152,6 +156,7 @@ function init(results) {
 
 		allDates.push(d.eighty_finish_second)
 		allDates.push(d.seventy_finish_second)
+		allDates.push(d.ninety_finish_second)
 		d.recent = +d.recent
 	})
 
@@ -179,8 +184,16 @@ function init(results) {
 		{"state":"TAS", "date":parseTime("2021-11-09"), "text":"9 Nov"}
 	]
 
+
+	const targetsHit90 = [
+		{"state":"NSW", "date":parseTime("2021-11-08"), "text":"8 Nov"},
+		{"state":"ACT", "date":parseTime("2021-10-27"), "text":"27 Oct"},
+		{"state":"VIC", "date":parseTime("2021-11-24"), "text":"24 Nov"}
+	]
+
 	const statesHit70 = targetsHit70.map(d => d.state)
 	const statesHit80 = targetsHit80.map(d => d.state)
+	const statesHit90 = targetsHit90.map(d => d.state)
 
 	console.log(statesHit70)
 
@@ -214,6 +227,10 @@ function init(results) {
 
 	var reds = d3.scaleLinear()	
 		.range(['#fcbba1','#ef3b2c'])
+		.domain([0,13])
+
+	var purples = d3.scaleLinear()	
+		.range(['#fcbba1','#713590'])
 		.domain([0,13])
 
 	var opacity = d3.scaleLinear()	
@@ -269,19 +286,49 @@ function init(results) {
       .attr("stop-color", blues.range()[1])
       .attr("stop-opacity", 1);  
 
+
+
+	//   ### Purple gradient 
+
+	var purpleGradient = keySvg.append("defs")
+	.append("svg:linearGradient")
+	.attr("id", "purpleGradient")
+	.attr("x1", "0%")
+	.attr("y1", "100%")
+	.attr("x2", "100%")
+	.attr("y2", "100%")
+	.attr("spreadMethod", "pad");
+
+	purpleGradient.append("stop")
+	.attr("offset", "0%")
+	.attr("stop-color", purples.range()[0])
+	.attr("stop-opacity", 1);
+
+	purpleGradient.append("stop")
+	.attr("offset", "100%")
+	.attr("stop-color", purples.range()[1])
+	.attr("stop-opacity", 1);
+
 	keySvg.append("rect")
 		.attr("y", 20)
 		.attr("x", keyLeftMargin)
 		.attr("width", keyWidth - keyLeftMargin)
-		.attr("height", 10)
-		.style("fill", "url(#redGradient)")
+		.attr("height", 7)
+		.style("fill", "url(#blueGradient)")
 
 	keySvg.append("rect")
-		.attr("y", 30)
+		.attr("y", 27)
 		.attr("x", keyLeftMargin)
 		.attr("width", keyWidth - keyLeftMargin)
-		.attr("height", 10)
-		.style("fill", "url(#blueGradient)")	
+		.attr("height", 7)
+		.style("fill", "url(#redGradient)")	
+	
+		keySvg.append("rect")
+		.attr("y", 34)
+		.attr("x", keyLeftMargin)
+		.attr("width", keyWidth - keyLeftMargin)
+		.attr("height", 7)
+		.style("fill", "url(#purpleGradient)")	
 
     keySvg.append("text")
         .attr("x", keyLeftMargin)
@@ -332,6 +379,7 @@ function init(results) {
 
 	var data70 = data.filter(d => !statesHit70.includes(d.state))
 	var data80 = data.filter(d => !statesHit80.includes(d.state))
+	var data90 = data.filter(d => !statesHit90.includes(d.state))
 
 	features.append("g")
 	.attr("class","axis y")
@@ -442,6 +490,57 @@ function init(results) {
 
 
 
+			// ### Add 90 circles 
+
+			features.selectAll("circles90")
+.data(data90)
+.enter()
+.append("circle")
+.attr("class", "ninety")
+.attr("cx", function(d) { return x(d.ninety_finish_second); })
+.attr("cy", function(d) { return y(d.state); })
+.attr("r", d => radius(d.recent))
+.style("fill", d => purples(d.recent))
+.attr("opacity", d => opacity(d.recent))
+.attr("stroke", d => {
+        if (d.day === 0) {
+            return "#000"
+        }
+
+        else {
+            return "none"
+        }
+    })
+.attr("stroke-width",1)	
+
+features.selectAll("reached90")
+    .data(targetsHit90)
+    .enter()
+    .append("circle")
+    .attr("class", "ninety")
+    .attr("cx", function(d) { return x(d.date); })
+    .attr("cy", function(d) { return y(d.state); })
+    .attr("r", d => radius(14))
+    .style("fill", d => purples(14))
+    .attr("opacity", 0.7)
+    .attr("stroke", "#000")
+    .attr("stroke-width",1)	
+
+features.selectAll("reached90")
+    .data(targetsHit90)
+    .enter()
+    .append("image")
+    .attr("xlink:href", '<%= path %>/tick.svg')
+    .attr("class", "ninety")
+    .attr("width", 14)
+    .attr("height", 14)
+    .attr("x", function(d) { return x(d.date) - 7; })
+    .attr("y", function(d) { return y(d.state) - 7; })
+
+
+
+
+
 	features.selectAll("circleLine")
 		.data(data80.filter(r => r.day === 0))
 		.enter()
@@ -499,6 +598,40 @@ function init(results) {
 		.attr("stroke-width",1)	
 
 
+		// ### Ninety circle line 
+	
+		features.selectAll("circleLine")
+		.data(targetsHit90)
+		.enter()
+		.append("line")
+		.attr("class", "circleLine ninety")
+		.attr("x1", d => x(d.date))
+		.attr("x2", d => x(d.date))
+		.attr("y1", d => { 
+				return y(d.state) - radius(14)
+			})
+		.attr("y2", d =>  { return y(d.state) - days_offset})
+		.attr("stroke", "#000")
+		.attr("stroke-width",1)	
+
+
+		features.selectAll("circleLine")
+		.data(data90.filter(r => r.day === 0))
+		.enter()
+		.append("line")
+		.attr("class", "circleLine ninety")
+		.attr("x1", d => x(d.ninety_finish_second))
+		.attr("x2", d => x(d.ninety_finish_second))
+		.attr("y1", d => { 
+				return y(d.state) - radius(d.recent)
+			})
+		.attr("y2", d =>  { return y(d.state) - days_offset})
+		.attr("stroke", "#000")
+		.attr("stroke-width",1)
+
+
+
+
 	features.selectAll("text80")
 		.data(data80.filter(r => r.day === 0))
 		.enter()
@@ -544,8 +677,32 @@ function init(results) {
 		.attr("font-size", 12)		
 
 
+		features.selectAll("text90")
+		.data(data90.filter(r => r.day === 0))
+		.enter()
+		.append("text")
+		.attr("x", d => x(d.ninety_finish_second))
+		.attr("text-anchor", "middle")
+		.attr("y", d => y(d.state) - days_offset - 2)
+		.attr("class", "keyLabel ninety")
+		.text(d => d.ninety_text)
+		.attr("font-size", 12)	
+
+	features.selectAll("text90")
+		.data(targetsHit90)
+		.enter()
+		.append("text")
+		.attr("x", d => x(d.date))
+		.attr("text-anchor", "middle")
+		.attr("y", d => y(d.state) - days_offset - 2)
+		.attr("class", "keyLabel ninety")
+		.text(d => d.text)
+		.attr("font-size", 12)
+
+
 	var seventyButton = context.select("#seventyButton")
 	var eightyButton = context.select("#eightyButton")
+	var ninetyButton = context.select("#ninetyButton")
 
 	if (seventyShowing) {
 			context.selectAll(".seventy")
@@ -570,6 +727,21 @@ function init(results) {
 				.attr("opacity", 0)	
 			eightyButton.classed("red-button-selected", false)
 	}
+
+// ## ninety 
+	if (ninetyShowing) {
+		context.selectAll(".ninety")
+			.attr("opacity", d => opacity(d.recent))
+		ninetyButton.classed("purple-button-selected", true)
+	}
+	
+	else {
+	context.selectAll(".ninety")
+			.attr("opacity", 0)	
+		ninetyButton.classed("purple-button-selected", false)
+	}
+
+
 
 
 	seventyButton.on("click", function() {
@@ -610,6 +782,48 @@ function init(results) {
 		}
 
 	})	
+
+
+	eightyButton.on("click", function() {
+		if (eightyShowing) {
+			context.selectAll(".eighty")
+				.transition()
+				.attr("opacity", 0)
+			eightyShowing = false	
+			eightyButton.classed("red-button-selected", false)
+		}
+
+		else {
+			context.selectAll(".eighty")
+				.transition()
+				.attr("opacity", d => opacity(d.recent))
+			eightyShowing = true
+			eightyButton.classed("red-button-selected", true)
+		}
+
+	})	
+
+
+
+	ninetyButton.on("click", function() {
+		if (ninetyShowing) {
+			context.selectAll(".ninety")
+				.transition()
+				.attr("opacity", 0)
+			ninetyShowing = false	
+			ninetyButton.classed("purple-button-selected", false)
+		}
+	
+		else {
+			context.selectAll(".ninety")
+				.transition()
+				.attr("opacity", d => opacity(d.recent))
+			ninetyShowing = true
+			ninetyButton.classed("purple-button-selected", true)
+		}
+	
+	})	
+
 
 }
 
