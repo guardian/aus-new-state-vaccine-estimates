@@ -161,10 +161,22 @@ function init(results) {
 
 	const targetsHit70 = [
 		{"state":"NSW", "date":parseTime("2021-10-06"), "text":"6 Oct"},
-		{"state":"ACT", "date":parseTime("2021-10-07"), "text":"7 Oct"}
+		{"state":"ACT", "date":parseTime("2021-10-07"), "text":"7 Oct"},
+		{"state":"AUS", "date":parseTime("2021-10-19"), "text":"19 Oct"},
+		{"state":"VIC", "date":parseTime("2021-10-20"), "text":"20 Oct"},
+		{"state":"TAS", "date":parseTime("2021-10-20"), "text":"20 Oct"},
+		{"state":"SA", "date":parseTime("2021-11-06"), "text":"6 Nov"},
+		{"state":"QLD", "date":parseTime("2021-11-13"), "text":"13 Nov"},
+		{"state":"WA", "date":parseTime("2021-11-14"), "text":"14 Nov"},
+		{"state":"NT", "date":parseTime("2021-11-12"), "text":"12 Nov"}
 	]
 
 	const targetsHit80 = [
+		{"state":"NSW", "date":parseTime("2021-10-16"), "text":"16 Oct"},
+		{"state":"ACT", "date":parseTime("2021-10-17"), "text":"17 Oct"},
+		{"state":"VIC", "date":parseTime("2021-10-30"), "text":"30 Oct"},
+		{"state":"AUS", "date":parseTime("2021-11-05"), "text":"5 Nov"},
+		{"state":"TAS", "date":parseTime("2021-11-09"), "text":"9 Nov"}
 	]
 
 	const statesHit70 = targetsHit70.map(d => d.state)
@@ -176,7 +188,7 @@ function init(results) {
 	const gdnDate = d3.timeFormat("%-d %B, %Y");
 
 	// console.log(gdnDate(lastUpdated))
-	context.select("#subTitle").html(`Based on the current seven day average of first doses for each state or territory, plus the most recent lag time between first and second doses. Showing estimates ranging from two weeks ago to now. Data as at ${gdnDate(lastUpdated)}.`)
+	context.select("#subTitle").html(`Based on the current seven day average of first doses for each state or territory, plus the most recent lag time between first and second doses. Showing estimates ranging from two weeks ago to now. Dates where jurisdictions have achieved a target are based on the actual vaccination data date, not the date of reporting. Data as at ${gdnDate(lastUpdated)}`)
 
 	// console.log("data", data)
 
@@ -404,6 +416,32 @@ function init(results) {
 			})
 		.attr("stroke-width",1)	
 
+		features.selectAll("reached80")
+			.data(targetsHit80)
+			.enter()
+			.append("circle")
+			.attr("class", "eighty")
+			.attr("cx", function(d) { return x(d.date); })
+			.attr("cy", function(d) { return y(d.state); })
+			.attr("r", d => radius(14))
+			.style("fill", d => reds(14))
+			.attr("opacity", 0.7)
+			.attr("stroke", "#000")
+			.attr("stroke-width",1)	
+
+		features.selectAll("reached80")
+			.data(targetsHit80)
+			.enter()
+			.append("image")
+			.attr("xlink:href", '<%= path %>/tick.svg')
+			.attr("class", "eighty")
+			.attr("width", 14)
+			.attr("height", 14)
+			.attr("x", function(d) { return x(d.date) - 7; })
+			.attr("y", function(d) { return y(d.state) - 7; })
+
+
+
 	features.selectAll("circleLine")
 		.data(data80.filter(r => r.day === 0))
 		.enter()
@@ -446,6 +484,20 @@ function init(results) {
 		.attr("stroke", "#000")
 		.attr("stroke-width",1)	
 
+		features.selectAll("circleLine")
+		.data(targetsHit80)
+		.enter()
+		.append("line")
+		.attr("class", "circleLine eighty")
+		.attr("x1", d => x(d.date))
+		.attr("x2", d => x(d.date))
+		.attr("y1", d => { 
+				return y(d.state) - radius(14)
+			})
+		.attr("y2", d =>  { return y(d.state) - days_offset})
+		.attr("stroke", "#000")
+		.attr("stroke-width",1)	
+
 
 	features.selectAll("text80")
 		.data(data80.filter(r => r.day === 0))
@@ -457,6 +509,17 @@ function init(results) {
 		.attr("class", "keyLabel eighty")
 		.text(d => d.eighty_text)
 		.attr("font-size", 12)
+
+	features.selectAll("text80")
+		.data(targetsHit80)
+		.enter()
+		.append("text")
+		.attr("x", d => x(d.date))
+		.attr("text-anchor", "middle")
+		.attr("y", d => y(d.state) - days_offset - 2)
+		.attr("class", "keyLabel eighty")
+		.text(d => d.text)
+		.attr("font-size", 12)		
 
 	features.selectAll("text70")
 		.data(data70.filter(r => r.day === 0))
