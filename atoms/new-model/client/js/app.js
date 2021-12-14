@@ -181,14 +181,19 @@ function init(results) {
 		{"state":"ACT", "date":parseTime("2021-10-17"), "text":"17 Oct"},
 		{"state":"VIC", "date":parseTime("2021-10-30"), "text":"30 Oct"},
 		{"state":"AUS", "date":parseTime("2021-11-05"), "text":"5 Nov"},
-		{"state":"TAS", "date":parseTime("2021-11-09"), "text":"9 Nov"}
+		{"state":"TAS", "date":parseTime("2021-11-09"), "text":"9 Nov"},
+		{"state":"SA", "date":parseTime("2021-11-27"), "text":"27 Nov"},
+		{"state":"QLD", "date":parseTime("2021-12-08"), "text":"8 Dec"},
+		{"state":"NT", "date":parseTime("2021-12-08"), "text":"8 Dec"},
+		{"state":"WA", "date":parseTime("2021-12-13"), "text":"13 Dec"}
 	]
 
 
 	const targetsHit90 = [
 		{"state":"NSW", "date":parseTime("2021-11-08"), "text":"8 Nov"},
 		{"state":"ACT", "date":parseTime("2021-10-27"), "text":"27 Oct"},
-		{"state":"VIC", "date":parseTime("2021-11-24"), "text":"24 Nov"}
+		{"state":"VIC", "date":parseTime("2021-11-24"), "text":"24 Nov"},
+		{"state":"TAS", "date":parseTime("2021-12-10"), "text":"10 Dec"}
 	]
 
 	const statesHit70 = targetsHit70.map(d => d.state)
