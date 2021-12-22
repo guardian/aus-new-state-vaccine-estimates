@@ -193,7 +193,8 @@ function init(results) {
 		{"state":"NSW", "date":parseTime("2021-11-08"), "text":"8 Nov"},
 		{"state":"ACT", "date":parseTime("2021-10-27"), "text":"27 Oct"},
 		{"state":"VIC", "date":parseTime("2021-11-24"), "text":"24 Nov"},
-		{"state":"TAS", "date":parseTime("2021-12-10"), "text":"10 Dec"}
+		{"state":"TAS", "date":parseTime("2021-12-10"), "text":"10 Dec"},
+		{"state":"AUS", "date":parseTime("2021-12-16"), "text":"16 Dec"}
 	]
 
 	const statesHit70 = targetsHit70.map(d => d.state)
