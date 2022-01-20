@@ -5,13 +5,21 @@ var seventyShowing = true
 var eightyShowing = true
 var ninetyShowing = true
 
+// var seventyBoosterShowing = true
+// var eightyBoosterShowing = true
+// var ninetyBoosterShowing = true
+
 function init(results) {
 
 	var data = results["sheets"]['data']
 
-console.log("Data", data)
+	console.log("RIGHT AT THE VERY FUCKING START",data)
+
+	console.log("JUST WANT TO MAKE SURE")
 
 	var dataKeys = Object.keys(data[0])
+
+	console.log("Datakeys", dataKeys)
 	// var xVar = dataKeys[4]
 	// var yVar = dataKeys[0]
 	// var seventies = dataKeys[3]
@@ -128,13 +136,22 @@ console.log("Data", data)
 
 		// console.log("70", init_state['70'])
 		if (typeof d.eighty_finish_second == "string") {
-			d.eighty_finish_second = parseTime(d.eighty_finish_second)
-			d.seventy_finish_second = parseTime(d.seventy_finish_second)
-			d.ninety_finish_second = parseTime(d.ninety_finish_second)
 
-			d.eighty_text = formatTime(d.eighty_finish_second)
+			d.seventy_finish_second = parseTime(d.booster_finish_80)
+			d.eighty_finish_second = parseTime(d.booster_finish_90)
+			// d.ninety_finish_second = parseTime(d.booster_finish_90)
+
 			d.seventy_text = formatTime(d.seventy_finish_second)
-			d.ninety_text = formatTime(d.ninety_finish_second)
+			d.eighty_text = formatTime(d.eighty_finish_second)
+			// d.ninety_text = formatTime(d.ninety_finish_second)
+
+			// // d.booster_seventy_finish = parseTime(d.booster_finish_70)
+			// d.booster_eighty_finish = parseTime(d.booster_finish_80)
+			// d.booster_ninety_finish = parseTime(d.booster_finish_90)
+
+			// // d.booster_seventy_text = formatTime(d.booster_seventy_finish)
+			// d.booster_eighty_text = formatTime(d.booster_eighty_finish)
+			// d.booster_ninety_text = formatTime(d.booster_ninety_finish)
 		}
 
 		// // If the dates are before the cutoff then we delete them
@@ -153,61 +170,62 @@ console.log("Data", data)
 		// 	d.eighty_text = ''
 		// 	d.eighty_finish_second = ''
 		// }
-
-		allDates.push(d.eighty_finish_second)
 		allDates.push(d.seventy_finish_second)
-		allDates.push(d.ninety_finish_second)
+		allDates.push(d.eighty_finish_second)
+		// allDates.push(d.ninety_finish_second)
+
+		// allDates.push(d.booster_seventy_finis)
+		// allDates.push(d.booster_eighty_finish)
+		// allDates.push(d.booster_ninety_finish)
 		d.recent = +d.recent
 	})
 
 	// console.log(data)
 
+	// console.log("Dates", allDates)
+
 	data.sort((a, b) => b.day - a.day);
 
 	const targetsHit70 = [
-		{"state":"NSW", "date":parseTime("2021-10-06"), "text":"6 Oct"},
-		{"state":"ACT", "date":parseTime("2021-10-07"), "text":"7 Oct"},
-		{"state":"AUS", "date":parseTime("2021-10-19"), "text":"19 Oct"},
-		{"state":"VIC", "date":parseTime("2021-10-20"), "text":"20 Oct"},
-		{"state":"TAS", "date":parseTime("2021-10-20"), "text":"20 Oct"},
-		{"state":"SA", "date":parseTime("2021-11-06"), "text":"6 Nov"},
-		{"state":"QLD", "date":parseTime("2021-11-13"), "text":"13 Nov"},
-		{"state":"WA", "date":parseTime("2021-11-14"), "text":"14 Nov"},
-		{"state":"NT", "date":parseTime("2021-11-12"), "text":"12 Nov"}
+		// {"state":"NSW", "date":parseTime("2021-11-08"), "text":"8 Nov"},
+		// {"state":"ACT", "date":parseTime("2021-10-27"), "text":"27 Oct"},
+		// {"state":"VIC", "date":parseTime("2021-11-24"), "text":"24 Nov"},
+		// {"state":"TAS", "date":parseTime("2021-12-10"), "text":"10 Dec"},
+		// {"state":"AUS", "date":parseTime("2021-12-16"), "text":"16 Dec"}
 	]
 
 	const targetsHit80 = [
-		{"state":"NSW", "date":parseTime("2021-10-16"), "text":"16 Oct"},
-		{"state":"ACT", "date":parseTime("2021-10-17"), "text":"17 Oct"},
-		{"state":"VIC", "date":parseTime("2021-10-30"), "text":"30 Oct"},
-		{"state":"AUS", "date":parseTime("2021-11-05"), "text":"5 Nov"},
-		{"state":"TAS", "date":parseTime("2021-11-09"), "text":"9 Nov"},
-		{"state":"SA", "date":parseTime("2021-11-27"), "text":"27 Nov"},
-		{"state":"QLD", "date":parseTime("2021-12-08"), "text":"8 Dec"},
-		{"state":"NT", "date":parseTime("2021-12-08"), "text":"8 Dec"},
-		{"state":"WA", "date":parseTime("2021-12-13"), "text":"13 Dec"}
+		// {"state":"NSW", "date":parseTime("2021-10-16"), "text":"16 Oct"},
+		// {"state":"ACT", "date":parseTime("2021-10-17"), "text":"17 Oct"},
+		// {"state":"VIC", "date":parseTime("2021-10-30"), "text":"30 Oct"},
+		// {"state":"AUS", "date":parseTime("2021-11-05"), "text":"5 Nov"},
+		// {"state":"TAS", "date":parseTime("2021-11-09"), "text":"9 Nov"},
+		// {"state":"SA", "date":parseTime("2021-11-27"), "text":"27 Nov"},
+		// {"state":"QLD", "date":parseTime("2021-12-08"), "text":"8 Dec"},
+		// {"state":"NT", "date":parseTime("2021-12-08"), "text":"8 Dec"},
+		// {"state":"WA", "date":parseTime("2021-12-13"), "text":"13 Dec"}
 	]
 
 
 	const targetsHit90 = [
-		{"state":"NSW", "date":parseTime("2021-11-08"), "text":"8 Nov"},
-		{"state":"ACT", "date":parseTime("2021-10-27"), "text":"27 Oct"},
-		{"state":"VIC", "date":parseTime("2021-11-24"), "text":"24 Nov"},
-		{"state":"TAS", "date":parseTime("2021-12-10"), "text":"10 Dec"},
-		{"state":"AUS", "date":parseTime("2021-12-16"), "text":"16 Dec"}
+		// {"state":"NSW", "date":parseTime("2021-11-08"), "text":"8 Nov"},
+		// {"state":"ACT", "date":parseTime("2021-10-27"), "text":"27 Oct"},
+		// {"state":"VIC", "date":parseTime("2021-11-24"), "text":"24 Nov"},
+		// {"state":"TAS", "date":parseTime("2021-12-10"), "text":"10 Dec"},
+		// {"state":"AUS", "date":parseTime("2021-12-16"), "text":"16 Dec"}
 	]
 
 	const statesHit70 = targetsHit70.map(d => d.state)
 	const statesHit80 = targetsHit80.map(d => d.state)
 	const statesHit90 = targetsHit90.map(d => d.state)
 
-	console.log(statesHit70)
+	// console.log(statesHit70)
 
 	var lastUpdated = parseTime(data.filter(r => r.day === 0)[0]['cutoff'])
 	const gdnDate = d3.timeFormat("%-d %B, %Y");
 
 	// console.log(gdnDate(lastUpdated))
-	context.select("#subTitle").html(`Based on the current seven day average of first doses for each state or territory, plus the most recent lag time between first and second doses. Showing estimates ranging from two weeks ago to now. Dates where jurisdictions have achieved a target are based on the actual vaccination data date, not the date of reporting. Data as at ${gdnDate(lastUpdated)}`)
+	context.select("#subTitle").html(`Based on the current dosing interval between second and booster doses for each state or territory. Dates where jurisdictions have achieved a target are based on the actual vaccination data date, not the date of reporting. Data as at ${gdnDate(lastUpdated)}`)
 
 	// console.log("data", data)
 
@@ -215,7 +233,7 @@ console.log("Data", data)
 	var maxDate = d3.max(allDates)
 
 	// var niceDate = new Date(minDate - 1000 * 60 * 60 * 24 * 3)
-	var niceDate = parseTime("2021-10-03")
+	var niceDate = parseTime("2022-02-01")
 
 	// console.log(niceDate)
 
@@ -296,45 +314,45 @@ console.log("Data", data)
 
 	//   ### Purple gradient
 
-	var purpleGradient = keySvg.append("defs")
-	.append("svg:linearGradient")
-	.attr("id", "purpleGradient")
-	.attr("x1", "0%")
-	.attr("y1", "100%")
-	.attr("x2", "100%")
-	.attr("y2", "100%")
-	.attr("spreadMethod", "pad");
+	// var purpleGradient = keySvg.append("defs")
+	// .append("svg:linearGradient")
+	// .attr("id", "purpleGradient")
+	// .attr("x1", "0%")
+	// .attr("y1", "100%")
+	// .attr("x2", "100%")
+	// .attr("y2", "100%")
+	// .attr("spreadMethod", "pad");
 
-	purpleGradient.append("stop")
-	.attr("offset", "0%")
-	.attr("stop-color", purples.range()[0])
-	.attr("stop-opacity", 1);
+	// purpleGradient.append("stop")
+	// .attr("offset", "0%")
+	// .attr("stop-color", purples.range()[0])
+	// .attr("stop-opacity", 1);
 
-	purpleGradient.append("stop")
-	.attr("offset", "100%")
-	.attr("stop-color", purples.range()[1])
-	.attr("stop-opacity", 1);
+	// purpleGradient.append("stop")
+	// .attr("offset", "100%")
+	// .attr("stop-color", purples.range()[1])
+	// .attr("stop-opacity", 1);
 
 	keySvg.append("rect")
 		.attr("y", 20)
 		.attr("x", keyLeftMargin)
 		.attr("width", keyWidth - keyLeftMargin)
-		.attr("height", 7)
+		.attr("height", 10)
 		.style("fill", "url(#blueGradient)")
 
 	keySvg.append("rect")
 		.attr("y", 27)
 		.attr("x", keyLeftMargin)
 		.attr("width", keyWidth - keyLeftMargin)
-		.attr("height", 7)
+		.attr("height", 10)
 		.style("fill", "url(#redGradient)")
 
-		keySvg.append("rect")
-		.attr("y", 34)
-		.attr("x", keyLeftMargin)
-		.attr("width", keyWidth - keyLeftMargin)
-		.attr("height", 7)
-		.style("fill", "url(#purpleGradient)")
+		// keySvg.append("rect")
+		// .attr("y", 34)
+		// .attr("x", keyLeftMargin)
+		// .attr("width", keyWidth - keyLeftMargin)
+		// .attr("height", 7)
+		// .style("fill", "url(#purpleGradient)")
 
     keySvg.append("text")
         .attr("x", keyLeftMargin)
@@ -386,6 +404,8 @@ console.log("Data", data)
 	var data70 = data.filter(d => !statesHit70.includes(d.state))
 	var data80 = data.filter(d => !statesHit80.includes(d.state))
 	var data90 = data.filter(d => !statesHit90.includes(d.state))
+
+
 
 	features.append("g")
 	.attr("class","axis y")
@@ -496,52 +516,54 @@ console.log("Data", data)
 
 
 
-			// ### Add 90 circles
+// 			// ### Add 90 circles
 
-			features.selectAll("circles90")
-.data(data90)
-.enter()
-.append("circle")
-.attr("class", "ninety")
-.attr("cx", function(d) { return x(d.ninety_finish_second); })
-.attr("cy", function(d) { return y(d.state); })
-.attr("r", d => radius(d.recent))
-.style("fill", d => purples(d.recent))
-.attr("opacity", d => opacity(d.recent))
-.attr("stroke", d => {
-        if (d.day === 0) {
-            return "#000"
-        }
+// 			features.selectAll("circles90")
+// .data(data90)
+// .enter()
+// .append("circle")
+// .attr("class", "ninety")
+// .attr("cx", function(d) { return x(d.ninety_finish_second); })
+// .attr("cy", function(d) { return y(d.state); })
+// .attr("r", d => radius(d.recent))
+// .style("fill", d => purples(d.recent))
+// .attr("opacity", d => opacity(d.recent))
+// .attr("stroke", d => {
+//         if (d.day === 0) {
+//             return "#000"
+//         }
 
-        else {
-            return "none"
-        }
-    })
-.attr("stroke-width",1)
+//         else {
+//             return "none"
+//         }
+//     })
+// .attr("stroke-width",1)
 
-features.selectAll("reached90")
-    .data(targetsHit90)
-    .enter()
-    .append("circle")
-    .attr("class", "ninety")
-    .attr("cx", function(d) { return x(d.date); })
-    .attr("cy", function(d) { return y(d.state); })
-    .attr("r", d => radius(14))
-    .style("fill", d => purples(14))
-    .attr("opacity", 0.7)
-    .attr("stroke", "#000")
-    .attr("stroke-width",1)
+// features.selectAll("reached90")
+//     .data(targetsHit90)
+//     .enter()
+//     .append("circle")
+//     .attr("class", "ninety")
+//     .attr("cx", function(d) { return x(d.date); })
+//     .attr("cy", function(d) { return y(d.state); })
+//     .attr("r", d => radius(14))
+//     .style("fill", d => purples(14))
+//     .attr("opacity", 0.7)
+//     .attr("stroke", "#000")
+//     .attr("stroke-width",1)
 
-features.selectAll("reached90")
-    .data(targetsHit90)
-    .enter()
-    .append("image")
-    .attr("xlink:href", '<%= path %>/tick.svg')
-    .attr("class", "ninety")
-    .attr("width", 14)
-    .attr("height", 14)
-    .attr("x", function(d) { return x(d.date) - 7; })
-    .attr("y", function(d) { return y(d.state) - 7; })
+// features.selectAll("reached90")
+//     .data(targetsHit90)
+//     .enter()
+//     .append("image")
+//     .attr("xlink:href", '<%= path %>/tick.svg')
+//     .attr("class", "ninety")
+//     .attr("width", 14)
+//     .attr("height", 14)
+//     .attr("x", function(d) { return x(d.date) - 7; })
+//     .attr("y", function(d) { return y(d.state) - 7; })
+
+
 
 
 
@@ -705,6 +727,90 @@ features.selectAll("reached90")
 		.text(d => d.text)
 		.attr("font-size", 12)
 
+// 		console.log("I done that")
+
+// 			console.log(booster70)
+
+// 			booster70.forEach(function(d){
+// 				// console.log(x(d.booster_finish_70))
+// 				console.log(d.booster_seventy_finish)
+// 			})
+
+// 	features.selectAll("boosters70")
+// 		.data(booster70)
+// 		.enter()
+// 		.append("rect")
+// 		.attr("class", "boostSeventy")
+// 		// .attr("rx", 10)
+// 		// .attr('ry', 10)
+// 		.attr("width", 20)
+// 		.attr("height", 20)
+// 		.attr("x", function(d) { return x(d.booster_seventy_finish); })
+// 		.attr("y", function(d) { return y(d.state); })
+// 		.style("fill", d => blues(d.recent))
+// 		.attr("opacity", 0.7)
+// 		.attr("stroke", d => {
+// 				if (d.day === 0) {
+// 					return "#000"
+// 				}
+
+// 				else {
+// 					return "none"
+// 				}
+// 			})
+// 		.attr("stroke-width",1)
+
+
+// 		console.log("I done that")
+
+
+// 		features.selectAll("boosters80")
+// .data(booster70)
+// .enter()
+// .append("rect")
+// .attr("class", "boostEighty")
+// // .attr("rx", 10)
+// // .attr('ry', 10)
+// .attr("width", 20)
+// .attr("height", 20)
+// .attr("x", function(d) { return x(d.booster_eighty_finish); })
+// .attr("y", function(d) { return y(d.state); })
+// .style("fill", d => reds(d.recent))
+// .attr("opacity", 0.7)
+// .attr("stroke", d => {
+//         if (d.day === 0) {
+//             return "#000"
+//         }
+
+//         else {
+//             return "none"
+//         }
+//     })
+// .attr("stroke-width",1)
+
+
+// features.selectAll("boosters90")
+// .data(booster70)
+// .enter()
+// .append("rect")
+// .attr("class", "boostNinety")
+// // .attr("rx", 10)
+// // .attr('ry', 10)
+// .attr("width", 20)
+// .attr("height", 20)
+// .attr("x", function(d) { return x(d.booster_ninety_finish); })
+// .attr("y", function(d) { return y(d.state); })
+// .style("fill", d => purples(d.recent))
+// .attr("opacity", 0.7)
+// .attr("stroke", d => {
+//         if (d.day === 0) {
+//             return "#000"
+//         }
+
+//         else {
+//             return "none"
+//         }
+//     })
 
 	var seventyButton = context.select("#seventyButton")
 	var eightyButton = context.select("#eightyButton")
@@ -836,7 +942,7 @@ features.selectAll("reached90")
 
 
 Promise.all([
-	d3.json('https://interactive.guim.co.uk/yacht-charter-data/new-model-state-projections.json')
+	d3.json('https://interactive.guim.co.uk/yacht-charter-data/new-model-state-projections-boosters-testo.json')
 	])
 	.then((results) =>  {
 		init(results[0])
